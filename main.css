@@ -1,0 +1,25 @@
+img {
+    width: 500px;
+    height: 500px;
+    display: block;
+}
+
+.lazy_bg1 {
+    background: url('https://jakubpolomski.com/wp-content/uploads/2018/01/Norway-Landscape-Photo-Jakub-Polomski-13NOR0462.jpg');
+}
+
+.lazy_bg2 {
+    background: url('https://i1.wp.com/drwyjmricaxm7.cloudfront.net/blog/wp-content/uploads/2016/08/Reine1.jpg?w=757&h=504&ssl=1');
+}
+
+.lazy_bg3 {
+    background: url('https://www.demilked.com/magazine/wp-content/uploads/2014/12/norway-landscape-photography-scandinavian-nature-28.jpg');
+}
+
+.lazy_bg4 {
+    background: url('https://static.boredpanda.com/blog/wp-content/uploads/2015/06/norway-photography-fb__700.jpg');
+}
+
+.lazy_bg5 {
+    background: url('https://petapixel.com/assets/uploads/2014/12/norway_landscape_anderslonnfeldt_01.jpg');
+}
