@@ -1,6 +1,6 @@
 img {
     width: 500px;
-    height: 500px;
+    height: 300px;
     display: block;
 }
 
@@ -22,4 +22,21 @@ img {
 
 .lazy_bg5 {
     background: url('https://petapixel.com/assets/uploads/2014/12/norway_landscape_anderslonnfeldt_01.jpg');
+}
+
+/* #carousel {
+    width: 100%;
+    overflow-x: scroll;
+    overflow-y: hidden;
+} */
+
+#carousel {
+    width: 100%;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space:nowrap;
+}
+
+#carousel .slide {
+    display: inline-block;
 }
