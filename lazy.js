@@ -1,5 +1,7 @@
+"use strict"; 
+
 function loadCSSImages(config) {
-    var lazyClassImages = document.querySelectorAll("[data-class]");
+    var lazyClassImages = document.querySelectorAll(config.selectors.css + "[data-class]");
 
     var options = {
         rootMargin: config.margin,
@@ -38,7 +40,7 @@ function loadCSSImages(config) {
 }
 
 function loadImageTags(config) {
-    var lazyImages = document.querySelectorAll(".nhs_Lazy");
+    var lazyImages = document.querySelectorAll(config.selectors.imgs);
 
 
 
@@ -52,7 +54,7 @@ function loadImageTags(config) {
             var entry = entries[index];
 
             if (entry.isIntersecting) {
-                entry.target.src += " " + entry.target.getAttribute('data-src');;
+                entry.target.src = entry.target.getAttribute('data-src');;
                 observer.unobserve(entry.target);
             }
 
@@ -63,7 +65,7 @@ function loadImageTags(config) {
 }
 
 function loadPictures(config) {
-    var pictures = document.querySelectorAll("picture > source");
+    var pictures = document.querySelectorAll(config.selectors.pictures + "> source");
     let lazyImageObserver =
         new IntersectionObserver(function (entries, observer) {
             entries.forEach(function (entry) {
@@ -85,7 +87,12 @@ var config = {
     css: true,
     images: true,
     pictures: true,
-    margin: "150px"
+    margin: "150px", 
+    selectors: {
+        imgs: ".nhs_Lazy",
+        css: ".nhs_LazyCss",
+        pictures: ".nhs_LazyPicture"
+    }
 }
 
 function lazy(config) {
