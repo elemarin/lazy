@@ -1,14 +1,22 @@
-"use strict"; 
+define([], function () {
+    "use strict";
 
-function loadCSSImages(config) {
-    var lazyClassImages = document.querySelectorAll(config.selectors.css + "[data-class]");
+    function loadCSSImages(config) {
+        var lazyClassImages = document.querySelectorAll("[data-type = '" + config.types.css + "']");
 
-    var options = {
-        rootMargin: config.margin,
-        root: null
-    };
+        var options = {
+            rootMargin: config.margin,
+            root: null
+        };
 
-    if (window.IntersectionObserver) {
+        if (!window.IntersectionObserver) {
+            for (var index = 0; index < lazyClassImages.length; index++) {
+                var image = lazyClassImages[index];
+                image.className += " " + image.getAttribute('data-class');;
+            }
+
+            return;
+        }
 
         var observer = new IntersectionObserver(function (entries) {
 
@@ -29,84 +37,91 @@ function loadCSSImages(config) {
             observer.observe(image);
 
         }
-    } else {
-        for (var index = 0; index < lazyClassImages.length; index++) {
-            var image = lazyClassImages[index];
-            image.className += " " + image.getAttribute('data-class');;
-        }
+
     }
 
-
-}
-
-function loadImageTags(config) {
-    var lazyImages = document.querySelectorAll(config.selectors.imgs);
+    function loadImageTags(config) {
+        var lazyImages = document.querySelectorAll("[data-type = '" + config.types.imgs + "']");
 
 
 
-    var options = {
-        rootMargin: config.margin,
-        root: null
-    };
+        var options = {
+            rootMargin: config.margin,
+            root: null
+        };
 
-    var observer = new IntersectionObserver(function (entries) {
-        for (var index = 0; index < entries.length; index++) {
-            var entry = entries[index];
-
-            if (entry.isIntersecting) {
-                entry.target.src = entry.target.getAttribute('data-src');;
-                observer.unobserve(entry.target);
+        if (!window.IntersectionObserver) {
+            for (var index = 0; index < lazyImages.length; index++) {
+                var image = lazyImages[index];
+                image.src = image.getAttribute('data-src');;
             }
 
+            return;
         }
-    }, options)
 
-    lazyImages.forEach(img => observer.observe(img));
-}
+        var observer = new IntersectionObserver(function (entries) {
+            for (var index = 0; index < entries.length; index++) {
+                var entry = entries[index];
 
-function loadPictures(config) {
-    var pictures = document.querySelectorAll(config.selectors.pictures + "> source");
-    let lazyImageObserver =
-        new IntersectionObserver(function (entries, observer) {
-            entries.forEach(function (entry) {
                 if (entry.isIntersecting) {
-                    let lazyImage = entry.target;
-                    lazyImage.srcset = lazyImage.dataset.srcset;
-                    // lazyImage.nextElementSibling.srcset = lazyImage.dataset.srcset;
-                    lazyImageObserver.unobserve(lazyImage);
+                    entry.target.src = entry.target.getAttribute('data-src');;
+                    observer.unobserve(entry.target);
                 }
+
+            }
+        }, options)
+
+        for (var index = 0; index < lazyImages.length; index++) {
+            const img = lazyImages[index];
+            observer.observe(img)
+
+        }
+        // lazyImages.forEach(img => observer.observe(img));
+    }
+
+    function loadPictures(config) {
+        var pictures = document.querySelectorAll("[data-type = '" + config.types.pictures + "']" + " > source");
+
+        if(!window.IntersectionObserver){
+            for (var index = 0; index < pictures.length; index++) {
+                var image = pictures[index];
+                image.srcset = image.getAttribute('data-srcset');;
+            }
+
+            return;
+        }
+
+        var observer =
+            new IntersectionObserver(function (entries, observer) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        let lazyImage = entry.target;
+                        lazyImage.srcset = lazyImage.dataset.srcset;
+                        // lazyImage.nextElementSibling.srcset = lazyImage.dataset.srcset;
+                        observer.unobserve(lazyImage);
+                    }
+                });
             });
+
+        pictures.forEach(function (lazyImage) {
+            observer.observe(lazyImage);
         });
-
-    pictures.forEach(function (lazyImage) {
-        lazyImageObserver.observe(lazyImage);
-    });
-}
-
-var config = {
-    css: true,
-    images: true,
-    pictures: true,
-    margin: "150px", 
-    selectors: {
-        imgs: ".nhs_Lazy",
-        css: ".nhs_LazyCss",
-        pictures: ".nhs_LazyPicture"
-    }
-}
-
-function lazy(config) {
-    if (config.css) {
-        loadCSSImages(config);
     }
 
-    if (config.images) {
-        loadImageTags(config);
+    function lazy(config) {
+        if (config.css) {
+            loadCSSImages(config);
+        }
+
+        if (config.images) {
+            loadImageTags(config);
+        }
+
+        if (config.pictures) {
+            loadPictures(config);
+        }
     }
 
-    if (config.pictures) {
-        loadPictures(config);
-    }
-}
+    return lazy;
 
-lazy(config);
+})
